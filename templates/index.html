@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Skin Disease Predictor</title>
+    <style>
+        :root {
+            --primary: #4CAF50;
+            --secondary: #f0f0f0;
+            --text-color: #333;
+            --error-color: #cc0000;
+            --success-color: #006600;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--secondary);
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            background-color: #fff;
+            max-width: 600px;
+            margin: 40px auto;
+            padding: 30px 40px;
+            border-radius: 15px;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+            transition: 0.3s;
+        }
+
+        h1 {
+            color: var(--primary);
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        input[type="file"] {
+            padding: 10px;
+            font-size: 1rem;
+            border-radius: 6px;
+            border: 1px solid #ccc;
+            margin-bottom: 20px;
+        }
+
+        button {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            padding: 10px 30px;
+            font-size: 1rem;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: 0.2s ease-in-out;
+        }
+
+        button:hover {
+            background-color: #388e3c;
+        }
+
+        img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 12px;
+            margin-top: 20px;
+        }
+
+        .result {
+            margin-top: 25px;
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .error {
+            background-color: #ffe6e6;
+            color: var(--error-color);
+            border: 1px solid var(--error-color);
+        }
+
+        .success {
+            background-color: #e6ffe6;
+            color: var(--success-color);
+            border: 1px solid var(--success-color);
+        }
+
+        #preview {
+            max-width: 250px;
+            border: 1px dashed #ccc;
+            padding: 10px;
+            background-color: #fafafa;
+        }
+
+        @media screen and (max-width: 600px) {
+            .container {
+                margin: 20px;
+                padding: 20px;
+            }
+
+            h1 {
+                font-size: 1.5rem;
+            }
+
+            button {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>Skin Disease Predictor</h1>
+
+    <form action="/predict" method="post" enctype="multipart/form-data" class="form-group">
+        <input type="file" name="file" accept="image/*" onchange="previewImage(event)" required>
+        <img id="preview" style="display:none;" />
+        <button type="submit">Predict</button>
+    </form>
+
+    {% if error %}
+        <div class="result error">{{ error }}</div>
+    {% endif %}
+
+    {% if prediction %}
+        <div class="result success">
+            <h3>Prediction: {{ prediction }}</h3>
+            <p>Confidence: {{ confidence }}</p>
+            <img src="{{ uploaded_image }}" alt="Uploaded Image">
+        </div>
+    {% endif %}
+</div>
+
+<script>
+    function previewImage(event) {
+        const reader = new FileReader();
+        reader.onload = function(){
+            const output = document.getElementById('preview');
+            output.src = reader.result;
+            output.style.display = 'block';
+        };
+        reader.readAsDataURL(event.target.files[0]);
+    }
+</script>
+</body>
+</html>
