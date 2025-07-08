@@ -12,8 +12,9 @@ import requests
 app = Flask(__name__)
 
 # Set UPLOAD_FOLDER to relative path with fallback for deployment
-UPLOAD_FOLDER = os.getenv('UPLOAD_FOLDER', os.path.join('static', 'Uploads'))
-os.makedirs(UPLOAD_FOLDER, exist_ok=True)  # Create folder if it doesn't exist
+UPLOAD_FOLDER = os.path.join(os.getcwd(), 'uploads')
+os.makedirs(UPLOAD_FOLDER, exist_ok=True)
+ # Create folder if it doesn't exist
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.config['MAX_CONTENT_LENGTH'] = 5 * 1024 * 1024  # 5MB upload limit
 
